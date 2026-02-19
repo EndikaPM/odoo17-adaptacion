@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================ -->
+    <!-- VISTA TREE (LISTA) - Hereda la lista de empleados            -->
+    <!-- Añade columnas: Fecha Nacimiento, DNI, Fecha Contratación,   -->
+    <!-- Nº Seguridad Social                                          -->
+    <!-- ============================================================ -->
+    <record id="view_employee_tree_custom" model="ir.ui.view">
+        <field name="name">hr.employee.tree.custom</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <!-- Añadimos las columnas después del campo 'name' -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="x_dni" string="DNI"/>
+                <field name="x_fecha_nacimiento" string="F. Nacimiento"/>
+                <field name="x_fecha_contratacion" string="F. Contratación"/>
+                <field name="x_num_seg_social" string="Nº Seg. Social"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- VISTA FORM (FORMULARIO) - Hereda el formulario de empleado   -->
+    <!-- Añade campos personales en la parte superior y una pestaña   -->
+    <!-- "Información Adicional" con contraseña, horas y horas extra  -->
+    <!-- ============================================================ -->
+    <record id="view_employee_form_custom" model="ir.ui.view">
+        <field name="name">hr.employee.form.custom</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Añadir DNI, Fecha Nacimiento, Fecha Contratación y
+                 Nº Seg. Social en la sección de información personal.
+                 Los insertamos después del campo work_email (o similar). -->
+            <xpath expr="//field[@name='work_phone']" position="after">
+                <field name="x_dni" string="DNI"/>
+                <field name="x_fecha_nacimiento" string="Fecha de Nacimiento"/>
+                <field name="x_fecha_contratacion" string="Fecha de Contratación"/>
+                <field name="x_num_seg_social" string="Nº Seguridad Social"/>
+            </xpath>
+
+            <!-- Añadir una nueva pestaña "Información Adicional" dentro
+                 del notebook (pestañas) del formulario del empleado -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Información Adicional" name="page_info_adicional">
+                    <group string="Seguridad">
+                        <group>
+                            <field name="x_contrasena" string="Contraseña" password="True"/>
+                        </group>
+                    </group>
+                    <group string="Control de Horas">
+                        <group>
+                            <field name="x_horas_contratado" string="Horas Contratadas"/>
+                            <field name="x_horas_trabajadas" string="Horas Trabajadas"/>
+                        </group>
+                        <group>
+                            <field name="x_horas_extra" string="Horas Extra"
+                                   decoration-danger="x_horas_extra &lt; 0"
+                                   decoration-success="x_horas_extra &gt;= 0"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
