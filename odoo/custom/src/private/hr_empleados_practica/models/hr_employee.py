@@ -6,6 +6,27 @@ class HrEmployee(models.Model):
 
     _inherit = "hr.employee"
 
+    # --- Timely ---
+    x_es_timely = fields.Boolean(
+        string="Empleado Timely",
+        default=False,
+        help="Marca este empleado como perteneciente a Timely. "
+             "Al activarlo se asigna automáticamente la etiqueta 'Timely'.",
+    )
+
+    @api.onchange("x_es_timely")
+    def _onchange_es_timely(self):
+        """Al marcar/desmarcar el checkbox, añade o quita la etiqueta 'Timely'."""
+        tag = self.env["hr.employee.category"].search(
+            [("name", "=", "Timely")], limit=1
+        )
+        if not tag:
+            tag = self.env["hr.employee.category"].create({"name": "Timely"})
+        if self.x_es_timely:
+            self.category_ids = [(4, tag.id)]  # 4 = añadir sin borrar los demás
+        else:
+            self.category_ids = [(3, tag.id)]  # 3 = quitar sin borrar los demás
+
     # --- Datos personales ---
     x_fecha_nacimiento = fields.Date(
         string="Fecha de Nacimiento",
