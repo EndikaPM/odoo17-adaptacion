@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_hr_employee_hours">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="header_report mb-4">
+                        <h2 class="text-center">Informe Consolidado de Horas</h2>
+                        <p class="text-center text-muted">Generado el: <t t-esc="time.strftime('%d/%m/%Y')"/></p>
+                    </div>
+
+                    <table class="table table-sm table-striped mt-4">
+                        <thead>
+                            <tr class="bg-primary text-white">
+                                <th>Empleado</th>
+                                <th>DNI</th>
+                                <th class="text-end">H. Contratadas</th>
+                                <th class="text-end">H. Trabajadas</th>
+                                <th class="text-end">H. Extra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="employee">
+                                <tr>
+                                    <td><strong><t t-esc="employee.name"/></strong></td>
+                                    <td><t t-esc="employee.x_dni or '-'"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % (employee.x_horas_contratado or 0)"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % (employee.x_horas_trabajadas or 0)"/></td>
+                                    <td t-attf-class="text-end #{'text-danger' if employee.x_horas_extra &lt; 0 else 'text-success'}">
+                                        <strong><t t-esc="'%.2f' % (employee.x_horas_extra or 0)"/></strong>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <div class="footer_summary mt-4 pt-2 border-top">
+                        <p>Total Empleados Seleccionados: <t t-esc="len(docs)"/></p>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
+

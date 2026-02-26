@@ -22,6 +22,8 @@
     "data": [
         "security/ir.model.access.csv",
         "views/hr_employee_views.xml",
+        "report/hr_employee_hours_report.xml",
+        "report/hr_employee_hours_report_action.xml",
     ],
     "installable": True,
     "application": False,
