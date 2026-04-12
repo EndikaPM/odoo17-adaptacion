@@ -1,0 +1,67 @@
+<odoo>
+
+    <record id="action_ausencias_solicitudes" model="ir.actions.act_window">
+      <field name="name">Solicitudes de Ausencias</field>
+      <field name="res_model">ausencias.solicitudes</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+      <menuitem id="menu_ausencias_root" name="Ausencias" sequence="10" />
+
+      <menuitem
+        id="menu_ausencias_main"
+        name="Gestión"
+        parent="menu_ausencias_root"
+        sequence="10"
+    />
+
+      <menuitem
+        id="menu_ausencias_solicitudes"
+        name="Ver Solicitudes"
+        parent="menu_ausencias_main"
+        action="action_ausencias_solicitudes"
+        sequence="10"
+    />
+
+            <record id="view_ausencias_tree" model="ir.ui.view">
+              <field name="name">ausencias.solicitudes.tree</field>
+              <field name="model">ausencias.solicitudes</field>
+              <field name="arch" type="xml">
+                <tree string="Solicitudes de Ausencias">
+                    <field name="employee_id" />
+                    <field name="tipo_motivo" />
+                    <field name="fecha_inicio" />
+                    <field name="fecha_fin" />
+                    <field name="hora_inicio" widget="float_time" optional="hide" />
+                    <field name="hora_fin" widget="float_time" optional="hide" />
+                </tree>
+              </field>
+            </record>
+
+
+          <record id="view_ausencias_form" model="ir.ui.view">
+            <field name="name">ausencias.solicitudes.form</field>
+            <field name="model">ausencias.solicitudes</field>
+            <field name="arch" type="xml">
+              <form string="Solicitud de Ausencia">
+                <sheet>
+                  <group>
+                    <group string="Datos del Empleado">
+                      <field name="employee_id" />
+                      <field name="tipo_motivo" />
+                    </group>
+                    <group string="Fechas">
+                      <field name="fecha_inicio" />
+                      <field name="hora_inicio" widget="float_time" />
+                      <field name="fecha_fin" />
+                      <field name="hora_fin" widget="float_time" />
+                    </group>
+                  </group>
+                  <group>
+                      <field name="descripcion_motivo" />
+                  </group>
+                </sheet>
+              </form>
+            </field>
+          </record>
+</odoo>

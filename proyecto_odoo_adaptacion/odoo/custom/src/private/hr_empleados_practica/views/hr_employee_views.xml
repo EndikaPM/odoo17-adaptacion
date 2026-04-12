@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_employee_tree_custom" model="ir.ui.view">
+        <field name="name">hr.employee.tree.custom</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="x_es_timely" string="Timely" />
+                <field name="x_dni" string="DNI" />
+                <field name="x_fecha_nacimiento" string="F. Nacimiento" />
+                <field name="x_fecha_contratacion" string="F. Contratación" />
+                <field name="x_num_seg_social" string="Nº Seg. Social" />
+            </xpath>
+            <!-- OCULTAR CAMPOS -->
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='parent_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_employee_form_custom" model="ir.ui.view">
+        <field name="name">hr.employee.form.custom</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form" />
+        <field name="arch" type="xml">
+
+            <!-- Añadir DNI, Fecha Nacimiento, Fecha Contratación y
+                 Nº Seg. Social en la sección de información personal.
+                 Los insertamos después del campo work_email (o similar). -->
+            <xpath expr="//field[@name='work_phone']" position="after">
+                <field name="x_dni" string="DNI" />
+                <field name="x_fecha_nacimiento" string="Fecha de Nacimiento" />
+                <field name="x_fecha_contratacion" string="Fecha de Contratación" />
+                <field name="x_num_seg_social" string="Nº Seguridad Social" />
+            </xpath>
+
+            <!-- Añadir la pestaña ANTES de las demás pestañas del notebook -->
+            <xpath expr="//notebook/page[1]" position="before">
+                <page string="Información Timely" name="page_info_adicional">
+                    <group string="Timely">
+                        <group>
+                            <field name="x_es_timely" string="Empleado Timely" />
+                        </group>
+                    </group>
+                    <group string="Seguridad">
+                        <group>
+                            <field
+                                name="x_contrasena"
+                                string="Contraseña"
+                                password="True"
+                            />
+                        </group>
+                    </group>
+                    <group string="Control de Horas">
+                        <group>
+                            <field
+                                name="x_horas_contratado"
+                                string="Horas Contratadas"
+                            />
+                            <field
+                                name="x_horas_trabajadas"
+                                string="Horas Trabajadas"
+                            />
+                        </group>
+                        <group>
+                            <field name="x_horas_extra" string="Horas Extra Anuales" />
+                                   decoration-danger="x_horas_extra &lt; 0"
+                                   decoration-success="x_horas_extra &gt;= 0"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Importación" name="page_importacion_empleados">
+                    <group string="Importar Empleados">
+                        <div
+                            class="text-muted"
+                        >Abre el asistente para importar empleados desde CSV o XLS/XLSX.</div>
+                        <button
+                            name="%(hr_empleados_practica.action_import_empleados_wizard)d"
+                            string="Abrir importador"
+                            type="action"
+                            class="btn-primary"
+                        />
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="view_employee_filter_custom" model="ir.ui.view">
+        <field name="name">hr.employee.search.custom</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter
+                    string="Empleados Timely"
+                    name="filter_timely"
+                    domain="[('x_es_timely', '=', True)]"
+                />
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="hr_employee_action_list_default" model="ir.actions.act_window">
+        <field name="name">Empleados</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">list,form,kanban,activity</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_filter_timely': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No se encontraron empleados.
+            </p>
+        </field>
+    </record>
+
+
+    <record id="hr.open_view_employee_list_my" model="ir.actions.act_window">
+        <field name="view_mode">list,form,kanban,activity</field>
+        <field name="context">{'search_default_filter_timely': 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<odoo>
+    <record id="action_report_hr_employee_hours" model="ir.actions.report">
+        <field name="name">Informe de Horas de Empleado</field>
+        <field name="model">hr.employee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_empleados_practica.report_hr_employee_hours</field>
+        <field name="report_file">hr_empleados_practica.report_hr_employee_hours</field>
+        <field name="print_report_name">'Informe de Horas - %s' % (context_today().strftime('%Y-%m-%d'))</field>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Vista del formulario del wizard -->
+    <record id="view_import_empleados_wizard_form" model="ir.ui.view">
+        <field name="name">import.empleados.wizard.form</field>
+        <field name="model">import.empleados.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar Empleados">
+                <header>
+                    <button
+                        name="action_importar"
+                        string="Importar"
+                        type="object"
+                        class="btn-primary"
+                    />
+                </header>
+                <group>
+                    <field name="file" filename="file_name" widget="binary" />
+                    <field name="file_name" invisible="1" />
+                </group>
+                <div class="text-muted">
+                    Formatos aceptados: <b>.csv</b> o <b>.xls/.xlsx</b><br />
+                    Cabecera esperada:
+                    <code>name, fecha_de_nacimiento, dni, password,
+                          fecha_contratacion, num_seg_social,
+                          horas_trabajadas, horas_contrato, horas_extras</code>
+                </div>
+                <footer>
+                    <button
+                        name="action_importar"
+                        string="Importar"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancelar" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el wizard -->
+    <record id="action_import_empleados_wizard" model="ir.actions.act_window">
+        <field name="name">Importar Empleados</field>
+        <field name="res_model">import.empleados.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Acción para menú superior (pantalla normal) -->
+    <record id="action_import_empleados_wizard_menu" model="ir.actions.act_window">
+        <field name="name">Importación</field>
+        <field name="res_model">import.empleados.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Pestaña de menú en RRHH junto a Empleados/Organigrama -->
+    <menuitem
+        id="menu_importacion_rrhh"
+        name="Importación"
+        parent="hr.menu_hr_root"
+        action="action_import_empleados_wizard_menu"
+        sequence="25"
+        groups="hr.group_hr_user"
+    />
+
+
+</odoo>

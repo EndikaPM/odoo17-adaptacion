@@ -1,0 +1,139 @@
+<odoo>
+    <!-- ============================================================ -->
+    <!-- Template QWEB para PDF: Horas por Empleado (A4)             -->
+    <!-- ============================================================ -->
+    <template id="report_consulta_horas" name="Reporte: Horas por Empleado">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="header-section">
+                        <h1>Reporte de Horas por Empleado</h1>
+                        <p>
+                            <strong>Fecha de Generacion:</strong>
+                            <t t-out="generated_at.strftime('%d/%m/%Y %H:%M')" />
+                        </p>
+                    </div>
+
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th class="col-nombre">Nombre</th>
+                                <th class="col-dni">DNI</th>
+                                <th class="col-horas text-right">Contrato Anual</th>
+                                <th class="col-horas text-right">Contrato / Mes</th>
+                                <th class="col-horas text-right">Horas Trabajadas</th>
+                                <th class="col-horas text-right">Horas Extra</th>
+                                <th class="col-estado">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="rows" t-as="row">
+                                <tr t-att-class="'row-' + row['extra_style']">
+                                    <td class="col-nombre"><t
+                                            t-out="row['nombre']"
+                                        /></td>
+                                    <td class="col-dni"><t t-out="row['dni']" /></td>
+                                    <td class="col-horas text-right"><t
+                                            t-out="'{:.2f}'.format(row['horas_contrato_anual'])"
+                                        /></td>
+                                    <td class="col-horas text-right"><t
+                                            t-out="'{:.2f}'.format(row['horas_contrato_mes'])"
+                                        /></td>
+                                    <td class="col-horas text-right"><t
+                                            t-out="'{:.2f}'.format(row['horas_trabajadas'])"
+                                        /></td>
+                                    <td
+                                        class="col-horas text-right"
+                                        t-att-style="'color: ' + ('green' if row['horas_extra'] &lt;= 0 else 'red') + '; font-weight: bold;'"
+                                    >
+                                        <t
+                                            t-out="'{:.2f}'.format(row['horas_extra'])"
+                                        />
+                                    </td>
+                                    <td class="col-estado">
+                                        <span
+                                            t-att-class="'badge badge-' + row['extra_style']"
+                                        >
+                                            <t t-out="row['extra_label']" />
+                                        </span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <div class="summary-section">
+                        <h3>Resumen</h3>
+                        <table class="table-summary">
+                            <tr>
+                                <td class="label">Total Horas Extra (de todos):</td>
+                                <td class="value red" t-if="total_extras &gt; 0">
+                                    <strong><t
+                                            t-out="'{:.2f}'.format(total_extras)"
+                                        /> horas</strong>
+                                </td>
+                                <td class="value green" t-else="">
+                                    <strong><t
+                                            t-out="'{:.2f}'.format(total_extras)"
+                                        /> horas</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">Total Horas que Deben:</td>
+                                <td class="value red">
+                                    <strong><t
+                                            t-out="'{:.2f}'.format(total_debe)"
+                                        /> horas</strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <style>
+                    .page { font-family: Arial, sans-serif; padding: 20px; }
+                    .header-section { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #333; padding-bottom: 15px; }
+                    .header-section h1 { color: #1f4788; margin: 0 0 10px 0; font-size: 24px; }
+                    .header-section p { margin: 0; color: #666; font-size: 12px; }
+                    .table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    .table thead { background-color: #1f4788; color: white; }
+                    .table thead th { padding: 12px; text-align: left; font-weight: bold; border: 1px solid #1f4788; }
+                    .table tbody td { padding: 10px 12px; border: 1px solid #ddd; font-size: 12px; }
+                    .row-green { background-color: #e8f5e9; }
+                    .row-red { background-color: #ffebee; }
+                    .col-nombre { width: 25%; font-weight: 500; }
+                    .col-dni { width: 12%; text-align: center; }
+                    .col-horas { width: 13%; text-align: right; }
+                    .col-estado { width: 12%; text-align: center; }
+                    .text-right { text-align: right; }
+                    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+                    .badge-green { background-color: #4caf50; color: white; }
+                    .badge-red { background-color: #f44336; color: white; }
+                    .summary-section { margin-top: 40px; padding: 20px; background-color: #f5f5f5; border-left: 4px solid #1f4788; }
+                    .summary-section h3 { color: #1f4788; margin-top: 0; font-size: 14px; }
+                    .table-summary { width: 100%; border-collapse: collapse; }
+                    .table-summary tr { height: 30px; }
+                    .table-summary .label { font-weight: bold; color: #333; width: 70%; }
+                    .table-summary .value { text-align: right; font-size: 13px; }
+                    .table-summary .value.green { color: #4caf50; }
+                    .table-summary .value.red { color: #f44336; }
+                    @media print {
+                        .page { padding: 0; }
+                        body { margin: 0; padding: 0; }
+                    }
+                </style>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Accion de Reporte PDF                                        -->
+    <!-- ============================================================ -->
+    <record id="action_report_consulta_horas" model="ir.actions.report">
+        <field name="name">Horas por Empleado (PDF)</field>
+        <field name="model">ausencias.consulta.horas</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ausencias.report_consulta_horas</field>
+        <field name="print_report_name">'Horas_por_Empleado'</field>
+    </record>
+</odoo>

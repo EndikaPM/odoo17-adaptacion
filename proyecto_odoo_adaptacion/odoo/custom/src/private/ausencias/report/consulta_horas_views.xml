@@ -1,0 +1,86 @@
+<odoo>
+    <!-- ============================================================ -->
+    <!-- Vista TREE (lista) – Consulta de horas por empleado          -->
+    <!-- ============================================================ -->
+    <record id="view_consulta_horas_tree" model="ir.ui.view">
+        <field name="name">ausencias.consulta.horas.tree</field>
+        <field name="model">ausencias.consulta.horas</field>
+        <field name="arch" type="xml">
+            <tree
+                string="Horas por Empleado"
+                create="false"
+                edit="false"
+                delete="false"
+            >
+                <field name="nombre" />
+                <field name="dni" />
+                <field name="horas_contrato_anual" widget="float_time" />
+                <field name="horas_contrato_mes" widget="float_time" />
+                <field name="horas_trabajadas" widget="float_time" />
+                <field
+                    name="horas_extra"
+                    widget="float_time"
+                    decoration-danger="horas_extra &gt; 0"
+                    decoration-success="horas_extra &lt;= 0"
+                />
+            </tree>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Vista SEARCH – filtros rápidos                               -->
+    <!-- ============================================================ -->
+    <record id="view_consulta_horas_search" model="ir.ui.view">
+        <field name="name">ausencias.consulta.horas.search</field>
+        <field name="model">ausencias.consulta.horas</field>
+        <field name="arch" type="xml">
+            <search string="Buscar empleado">
+                <field name="nombre" />
+                <field name="dni" />
+                <filter
+                    name="con_extras"
+                    string="Con horas extra"
+                    domain="[('horas_extra', '&gt;', 0)]"
+                />
+                <filter
+                    name="debe_horas"
+                    string="Debe horas"
+                    domain="[('horas_extra', '&lt;', 0)]"
+                />
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Acción para abrir la consulta                                -->
+    <!-- ============================================================ -->
+    <record id="action_consulta_horas" model="ir.actions.act_window">
+        <field name="name">Horas por Empleado</field>
+        <field name="res_model">ausencias.consulta.horas</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_consulta_horas_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay empleados registrados.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Menú: Ausencias ▸ Consultas ▸ Horas por Empleado             -->
+    <!-- ============================================================ -->
+    <menuitem
+        id="menu_ausencias_consultas"
+        name="Consultas"
+        parent="menu_ausencias_root"
+        sequence="20"
+    />
+
+    <menuitem
+        id="menu_consulta_horas"
+        name="Horas por Empleado"
+        parent="menu_ausencias_consultas"
+        action="action_consulta_horas"
+        sequence="10"
+    />
+</odoo>

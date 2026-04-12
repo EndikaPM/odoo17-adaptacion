@@ -1,0 +1,11 @@
+web: ["*"]
+---
+ENV:
+  DEFAULT_REPO_PATTERN: https://github.com/EndikaPM/{}.git
+  ODOO_VERSION: 17.0
+
+odoo17-adaptacion: ["*"]
+
+# Repositorio de la OCA (Corregido para Doodba)
+https://github.com/OCA/web:
+  - web_responsive
