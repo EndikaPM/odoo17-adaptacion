@@ -18,8 +18,13 @@ class ReportConsultaHoras(models.AbstractModel):
         Returns:
             dict con los datos que recibirá la plantilla QWEB
         """
-        # Obtenemos todos los registros de la consulta de horas
-        consulta_horas = self.env["ausencias.consulta.horas"].search([])
+        # Si no se pasan ids, el reporte incluye todos los empleados.
+        consulta_horas_model = self.env["ausencias.consulta.horas"]
+        consulta_horas = (
+            consulta_horas_model.browse(docids)
+            if docids
+            else consulta_horas_model.search([])
+        )
 
         # Procesamos cada fila para añadir estilos condicionales
         rows = []
@@ -42,10 +47,17 @@ class ReportConsultaHoras(models.AbstractModel):
             }
             rows.append(row_data)
 
+        total_mas = sum(r["horas_extra"] for r in rows if r["horas_extra"] > 0)
+        total_menos = abs(sum(r["horas_extra"] for r in rows if r["horas_extra"] < 0))
+        total_neto = sum(r["horas_extra"] for r in rows)
+
         return {
+            "doc_ids": consulta_horas.ids,
             "doc_model": "ausencias.consulta.horas",
+            "docs": consulta_horas,
             "rows": rows,
-            "total_extras": sum(r["horas_extra"] for r in rows),
-            "total_debe": sum(r["horas_extra"] for r in rows if r["horas_extra"] < 0),
+            "total_mas": total_mas,
+            "total_menos": total_menos,
+            "total_neto": total_neto,
             "generated_at": fields.Datetime.now(),
         }

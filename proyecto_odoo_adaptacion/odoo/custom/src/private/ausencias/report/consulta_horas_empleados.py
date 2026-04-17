@@ -22,9 +22,9 @@ class ConsultaHorasEmpleados(models.Model):
     _order = "nombre"
     _rec_name = "nombre"
 
-    # ------------------------------------------------------------------
+
     # Campos (deben coincidir con las columnas del SELECT en init())
-    # ------------------------------------------------------------------
+
     nombre = fields.Char(string="Nombre", readonly=True)
     dni = fields.Char(string="DNI", readonly=True)
     horas_contrato_anual = fields.Float(
@@ -47,9 +47,7 @@ class ConsultaHorasEmpleados(models.Model):
         "Negativo = debe horas; positivo = extras.",
     )
 
-    # ------------------------------------------------------------------
-    # Vista SQL  –  MODIFICA AQUÍ la lógica si lo necesitas
-    # ------------------------------------------------------------------
+
     def init(self):
         """Crea (o reemplaza) la vista SQL que alimenta este modelo.
 
@@ -74,17 +72,16 @@ class ConsultaHorasEmpleados(models.Model):
 
                 SELECT
                     -- ID único del empleado (clave primaria de la vista)
-                    e.id                                           AS id,
-
+                    e.id  AS id,
                     -- Nombre completo del empleado
-                    e.name                                         AS nombre,
+                    e.name AS nombre,
 
                     -- DNI del empleado (campo personalizado x_dni)
-                    e.x_dni                                        AS dni,
+                    e.x_dni AS dni,
 
                     -- Horas contratadas ANUALES (tal como está en la BD)
                     -- COALESCE = si es NULL, usa 0 para evitar errores
-                    COALESCE(e.x_horas_contratado, 0)              AS horas_contrato_anual,
+                    COALESCE(e.x_horas_contratado, 0) AS horas_contrato_anual,
 
                     -- Horas contratadas MENSUALES = anual / 12
                     -- ROUND = redondea a 2 decimales
@@ -92,10 +89,10 @@ class ConsultaHorasEmpleados(models.Model):
                     ROUND(
                         (COALESCE(e.x_horas_contratado, 0) / 12.0)::numeric,
                         2
-                    )                                              AS horas_contrato_mes,
+                    ) AS horas_contrato_mes,
 
                     -- Horas realmente TRABAJADAS este mes
-                    COALESCE(e.x_horas_trabajadas, 0)              AS horas_trabajadas,
+                    COALESCE(e.x_horas_trabajadas, 0) AS horas_trabajadas,
 
                     -- HORAS EXTRA = Horas trabajadas - Horas contrato mensual
                     -- Si es POSITIVO = ha trabajado EXTRAS
@@ -104,7 +101,7 @@ class ConsultaHorasEmpleados(models.Model):
                         (COALESCE(e.x_horas_trabajadas, 0)
                         - COALESCE(e.x_horas_contratado, 0) / 12.0)::numeric,
                         2
-                    )                                             AS horas_extra
+                    ) AS horas_extra
 
                 -- Se obtienen datos de la tabla hr_employee (empleados)
                 FROM hr_employee e

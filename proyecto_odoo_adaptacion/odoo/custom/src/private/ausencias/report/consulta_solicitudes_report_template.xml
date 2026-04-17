@@ -1,0 +1,109 @@
+<odoo>
+    <!-- Template QWEB para PDF: Solicitudes de Ausencia (A4) -->
+    <template id="report_consulta_solicitudes" name="Reporte: Solicitudes de Ausencia">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="header-section">
+                        <h1>Reporte de Solicitudes de Ausencia</h1>
+                        <p>
+                            <strong>Fecha de generación:</strong>
+                            <t t-out="generated_at.strftime('%d/%m/%Y %H:%M')" />
+                        </p>
+                    </div>
+                    <!-- KPI superior -->
+                    <div class="kpi-container">
+                        <div class="kpi-card kpi-blue">
+                            <div class="kpi-title">Total Solicitudes</div>
+                            <div class="kpi-value">
+                                <t t-out="total_solicitudes" />
+                            </div>
+                        </div>
+                        <div class="kpi-card kpi-orange">
+                            <div class="kpi-title">Total Días Solicitados</div>
+                            <div class="kpi-value">
+                                <t t-out="total_dias" /> días
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tabla de solicitudes -->
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Empleado</th>
+                                <th>Motivo</th>
+                                <th class="text-center">Fecha Inicio</th>
+                                <th class="text-center">Fecha Fin</th>
+                                <th class="text-center">Hora Inicio</th>
+                                <th class="text-center">Hora Fin</th>
+                                <th class="text-right">Días</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="rows" t-as="row">
+                                <tr>
+                                    <td><t t-out="row['nombre']" /></td>
+                                    <td><t t-out="row['tipo_motivo']" /></td>
+                                    <td class="text-center">
+                                        <t t-out="row['fecha_inicio'].strftime('%d/%m/%Y') if row['fecha_inicio'] else ''" />
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-out="row['fecha_fin'].strftime('%d/%m/%Y') if row['fecha_fin'] else ''" />
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-out="'{:02d}:{:02d}'.format(int(row['hora_inicio']), int((row['hora_inicio'] % 1) * 60))" />
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-out="'{:02d}:{:02d}'.format(int(row['hora_fin']), int((row['hora_fin'] % 1) * 60))" />
+                                    </td>
+                                    <td class="text-right" style="font-weight:bold;">
+                                        <t t-out="row['dias_solicitados']" />
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-weight:bold; background:#f0f0f0;">
+                                <td colspan="6" class="text-right">TOTAL DÍAS</td>
+                                <td class="text-right"><t t-out="total_dias" /></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <style>
+                    .page { font-family: Arial, sans-serif; padding: 20px; }
+                    .header-section { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #333; padding-bottom: 15px; }
+                    .header-section h1 { color: #1f4788; margin: 0 0 10px 0; font-size: 24px; }
+                    .header-section p { margin: 0; color: #666; font-size: 12px; }
+                    .kpi-container { display: table; width: 100%; margin: 20px 0; table-layout: fixed; border-spacing: 10px 0; }
+                    .kpi-card { display: table-cell; padding: 12px; border-radius: 6px; border: 1px solid #ddd; text-align: center; }
+                    .kpi-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+                    .kpi-value { font-size: 20px; font-weight: bold; }
+                    .kpi-blue { background: #e3f2fd; color: #0d47a1; border-color: #90caf9; }
+                    .kpi-orange { background: #fff3e0; color: #e65100; border-color: #ffcc80; }
+                    .table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    .table thead { background-color: #1f4788; color: white; }
+                    .table thead th { padding: 12px; text-align: left; font-weight: bold; border: 1px solid #1f4788; }
+                    .table tbody td { padding: 10px 12px; border: 1px solid #ddd; font-size: 12px; }
+                    .table tfoot td { padding: 10px 12px; border: 1px solid #ddd; font-size: 13px; }
+                    .text-center { text-align: center; }
+                    .text-right { text-align: right; }
+                    @media print {
+                        .page { padding: 0; }
+                        body { margin: 0; padding: 0; }
+                    }
+                </style>
+            </t>
+        </t>
+    </template>
+    <!-- Acción de Reporte PDF -->
+    <record id="action_report_consulta_solicitudes" model="ir.actions.report">
+        <field name="name">Solicitudes de Ausencia (PDF)</field>
+        <field name="model">ausencias.consulta.solicitudes</field>
+        <field name="binding_model_id" ref="model_ausencias_consulta_solicitudes" />
+        <field name="binding_type">report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ausencias.report_consulta_solicitudes</field>
+        <field name="print_report_name">'Solicitudes_Ausencia'</field>
+    </record>
+</odoo>
