@@ -1,5 +1,5 @@
 <odoo>
-    <!-- Template QWEB para PDF: Horas por Empleado (A4) -->
+
     <template id="report_consulta_horas" name="Reporte: Horas por Empleado">
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
@@ -12,29 +12,6 @@
                         </p>
                     </div>
 
-                    <div class="kpi-container">
-                        <div class="kpi-card kpi-red">
-                            <div class="kpi-title">Acumuladas de mas</div>
-                            <div class="kpi-value">
-                                <t t-out="'{:.2f}'.format(total_mas)" /> h
-                            </div>
-                        </div>
-                        <div class="kpi-card kpi-green">
-                            <div class="kpi-title">Acumuladas de menos</div>
-                            <div class="kpi-value">
-                                <t t-out="'{:.2f}'.format(total_menos)" /> h
-                            </div>
-                        </div>
-                        <div
-                            class="kpi-card"
-                            t-attf-class="kpi-card #{'kpi-red' if total_neto &gt;= 0 else 'kpi-green'}"
-                        >
-                            <div class="kpi-title">Balance neto</div>
-                            <div class="kpi-value">
-                                <t t-out="'{:.2f}'.format(total_neto)" /> h
-                            </div>
-                        </div>
-                    </div>
 
                     <table class="table table-striped table-hover">
                         <thead>
@@ -85,44 +62,10 @@
                     </table>
 
                 </div>
-
-                <style>
-                    .page { font-family: Arial, sans-serif; padding: 20px; }
-                    .header-section { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #333; padding-bottom: 15px; }
-                    .header-section h1 { color: #1f4788; margin: 0 0 10px 0; font-size: 24px; }
-                    .header-section p { margin: 0; color: #666; font-size: 12px; }
-                    .table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                    .kpi-container { display: table; width: 100%; margin: 20px 0; table-layout: fixed; border-spacing: 10px 0; }
-                    .kpi-card { display: table-cell; padding: 12px; border-radius: 6px; border: 1px solid #ddd; text-align: center; }
-                    .kpi-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-                    .kpi-value { font-size: 20px; font-weight: bold; }
-                    .kpi-red { background: #ffebee; color: #b71c1c; border-color: #ffcdd2; }
-                    .kpi-green { background: #e8f5e9; color: #1b5e20; border-color: #c8e6c9; }
-                    .table thead { background-color: #1f4788; color: white; }
-                    .table thead th { padding: 12px; text-align: left; font-weight: bold; border: 1px solid #1f4788; }
-                    .table tbody td { padding: 10px 12px; border: 1px solid #ddd; font-size: 12px; }
-                    .row-green { background-color: #e8f5e9; }
-                    .row-red { background-color: #ffebee; }
-                    .col-nombre { width: 25%; font-weight: 500; }
-                    .col-dni { width: 12%; text-align: center; }
-                    .col-horas { width: 13%; text-align: right; }
-                    .col-estado { width: 12%; text-align: center; }
-                    .text-right { text-align: right; }
-                    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-                    .badge-green { background-color: #4caf50; color: white; }
-                    .badge-red { background-color: #f44336; color: white; }
-                    @media print {
-                        .page { padding: 0; }
-                        body { margin: 0; padding: 0; }
-                    }
-                </style>
             </t>
         </t>
     </template>
 
-    <!-- ============================================================ -->
-    <!-- Accion de Reporte PDF                                        -->
-    <!-- ============================================================ -->
     <record id="action_report_consulta_horas" model="ir.actions.report">
         <field name="name">Horas por Empleado (PDF)</field>
         <field name="model">ausencias.consulta.horas</field>

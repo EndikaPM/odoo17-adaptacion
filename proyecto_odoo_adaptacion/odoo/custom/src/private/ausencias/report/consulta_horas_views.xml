@@ -1,7 +1,4 @@
 <odoo>
-    <!-- ============================================================ -->
-    <!-- Vista TREE (lista) – Consulta de horas por empleado          -->
-    <!-- ============================================================ -->
     <record id="view_consulta_horas_tree" model="ir.ui.view">
         <field name="name">ausencias.consulta.horas.tree</field>
         <field name="model">ausencias.consulta.horas</field>
@@ -27,9 +24,6 @@
         </field>
     </record>
 
-    <!-- ============================================================ -->
-    <!-- Vista SEARCH – filtros rápidos                               -->
-    <!-- ============================================================ -->
     <record id="view_consulta_horas_search" model="ir.ui.view">
         <field name="name">ausencias.consulta.horas.search</field>
         <field name="model">ausencias.consulta.horas</field>
@@ -51,9 +45,6 @@
         </field>
     </record>
 
-    <!-- ============================================================ -->
-    <!-- Acción para abrir la consulta                                -->
-    <!-- ============================================================ -->
     <record id="action_consulta_horas" model="ir.actions.act_window">
         <field name="name">Horas por Empleado</field>
         <field name="res_model">ausencias.consulta.horas</field>
@@ -66,9 +57,6 @@
         </field>
     </record>
 
-    <!-- ============================================================ -->
-    <!-- Menú: Ausencias ▸ Consultas ▸ Horas por Empleado             -->
-    <!-- ============================================================ -->
     <menuitem
         id="menu_ausencias_consultas"
         name="Consultas"

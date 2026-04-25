@@ -1,7 +1,5 @@
 <odoo>
-    <!-- ============================================================ -->
-    <!-- Vista TREE – Solicitudes de ausencia (solo lectura)          -->
-    <!-- ============================================================ -->
+
     <record id="view_consulta_solicitudes_tree" model="ir.ui.view">
         <field name="name">ausencias.consulta.solicitudes.tree</field>
         <field name="model">ausencias.consulta.solicitudes</field>
@@ -10,10 +8,8 @@
                 string="Solicitudes de Ausencia"
                 create="false"
                 edit="false"
-                delete="false"
-            >
+                delete="false">
                 <header>
-                    <!-- Botón Imprimir PDF directamente en la vista tree -->
                     <button
                         name="%(action_report_consulta_solicitudes)d"
                         string="Imprimir PDF"
@@ -32,9 +28,7 @@
         </field>
     </record>
 
-    <!-- ============================================================ -->
-    <!-- Vista SEARCH – filtros rápidos                               -->
-    <!-- ============================================================ -->
+
     <record id="view_consulta_solicitudes_search" model="ir.ui.view">
         <field name="name">ausencias.consulta.solicitudes.search</field>
         <field name="model">ausencias.consulta.solicitudes</field>
@@ -65,9 +59,7 @@
         </field>
     </record>
 
-    <!-- ============================================================ -->
-    <!-- Acción para abrir la consulta                                -->
-    <!-- ============================================================ -->
+ 
     <record id="action_consulta_solicitudes" model="ir.actions.act_window">
         <field name="name">Solicitudes de Ausencia</field>
         <field name="res_model">ausencias.consulta.solicitudes</field>
@@ -80,9 +72,7 @@
         </field>
     </record>
 
-    <!-- ============================================================ -->
-    <!-- Menú: Ausencias ▸ Consultas ▸ Solicitudes de Ausencia        -->
-    <!-- ============================================================ -->
+
     <menuitem
         id="menu_consulta_solicitudes"
         name="Solicitudes de Ausencia"
