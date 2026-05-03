@@ -6,14 +6,14 @@ from odoo.http import request
 class AusenciasAPI(http.Controller):
     """Controlador API para gestionar ausencias desde aplicaciones externas (React, etc)"""
 
-    @http.route('/api/ausencias/listar', auth='public', type='http', methods=['GET'], csrf=False)
+    @http.route('/api/ausencias/listar', auth='public', type='http', methods=['GET'], csrf=False, cors='*')
     def listar_ausencias(self):
         """
         Retorna todas las ausencias almacenadas en formato JSON
         GET /api/ausencias/listar
         """
         try:
-            ausencias = request.env['ausencias.solicitudes'].search([])
+            ausencias = request.env['ausencias.solicitudes'].sudo().search([])
 
             ausencias_data = []
             for ausencia in ausencias:
@@ -47,7 +47,7 @@ class AusenciasAPI(http.Controller):
                 status=500
             )
 
-    @http.route('/api/ausencias/crear', auth='public', type='json', methods=['POST'], csrf=False)
+    @http.route('/api/ausencias/crear', auth='public', type='json', methods=['POST'], csrf=False, cors='*')
     def crear_ausencia(self):
         """
         Crea una nueva ausencia desde un JSON
@@ -106,7 +106,7 @@ class AusenciasAPI(http.Controller):
                 'hora_fin': data.get('hora_fin', 0),
             }
 
-            nueva_ausencia = request.env['ausencias.solicitudes'].create(ausencia_vals)
+            nueva_ausencia = request.env['ausencias.solicitudes'].sudo().create(ausencia_vals)
 
             return {
                 'success': True,
@@ -129,7 +129,7 @@ class AusenciasAPI(http.Controller):
                 'error': str(e)
             }
 
-    @http.route('/api/ausencias/opciones-tipo-motivo', auth='public', type='http', methods=['GET'], csrf=False)
+    @http.route('/api/ausencias/opciones-tipo-motivo', auth='public', type='http', methods=['GET'], csrf=False, cors='*')
     def obtener_opciones_tipo_motivo(self):
         """
         Retorna las opciones disponibles para tipo_motivo
@@ -156,6 +156,33 @@ class AusenciasAPI(http.Controller):
                     'success': False,
                     'error': str(e)
                 }),
+                headers={'Content-Type': 'application/json'},
+                status=500
+            )
+
+    @http.route('/api/ausencias/empleados', auth='public', type='http', methods=['GET'], csrf=False, cors='*')
+    def obtener_empleados(self):
+        try:
+            empleados = request.env['hr.employee'].sudo().search([])
+
+            empleados_data = []
+            for emp in empleados:
+                empleados_data.append({
+                    'id': emp.id,
+                    'name': emp.name,
+                })
+
+            return request.make_response(
+                json.dumps({
+                    'success': True,
+                    'data': empleados_data,
+                    'count': len(empleados_data)
+                }),
+                headers={'Content-Type': 'application/json'}
+            )
+        except Exception as e:
+            return request.make_response(
+                json.dumps({'success': False, 'error': str(e)}),
                 headers={'Content-Type': 'application/json'},
                 status=500
             )
